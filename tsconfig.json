@@ -14,7 +14,8 @@
       //路径映射，相对于baseUrl
       "@/*": ["src/*"]
     },
-    "types": ["pinia-plugin-persist"]
+    "types": ["pinia-plugin-persist"],
+    "moduleResolution": "node"
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "Element-plus.d.ts"]
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "element-plus.d.ts"]
 }
