@@ -8,7 +8,7 @@ export const useUserStore = defineStore(
   () => {
     // 用户数据信息
     const userInfo = <string>ref({
-      token: '',
+      token: ''
     })
 
     // 用户登录
@@ -25,10 +25,10 @@ export const useUserStore = defineStore(
     // 用户登录
     return {
       userInfo,
-      userLogin,
+      userLogin
     }
   },
   {
-    persist: true,
-  },
+    persist: true
+  }
 )

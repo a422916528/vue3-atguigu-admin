@@ -16,23 +16,23 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
       vue(),
       // ...
       AutoImport({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver()]
       }),
       Components({
-        resolvers: [ElementPlusResolver()],
+        resolvers: [ElementPlusResolver()]
       }),
       createSvgIconsPlugin({
         iconDirs: [path.resolve(process.cwd(), 'src/assets/icons')],
-        symbolId: 'icon-[dir]-[name]',
+        symbolId: 'icon-[dir]-[name]'
       }),
       viteMockServe({
-        localEnabled: command === 'serve',
-      } as any),
+        localEnabled: command === 'serve'
+      } as any)
     ],
     resolve: {
       alias: {
-        '@': path.resolve('./src'),
-      },
+        '@': path.resolve('./src')
+      }
     },
     css: {
       preprocessorOptions: {
@@ -40,9 +40,9 @@ export default ({ command }: ConfigEnv): UserConfigExport => {
           // 自动导入scss文件
           additionalData: `
             @use "@/styles/var.scss" as *;
-          `,
-        },
-      },
-    },
+          `
+        }
+      }
+    }
   }
 }

@@ -4,7 +4,7 @@ const request = axios.create({
   // 基础路径
   baseURL: import.meta.env.VITE_APP_BASE_API,
   // 响应时间
-  timeout: 5000,
+  timeout: 5000
 })
 
 let loadingInstance: any = null
@@ -19,7 +19,7 @@ request.interceptors.request.use(
   function (error) {
     // 对请求错误做些什么
     return Promise.reject(error)
-  },
+  }
 )
 
 // 添加响应拦截器
@@ -40,7 +40,7 @@ request.interceptors.response.use(
         ElMessage.error('请求地址错误')
     }
     return Promise.reject(error)
-  },
+  }
 )
 
 export default request
