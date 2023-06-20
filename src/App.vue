@@ -1,10 +1,7 @@
-<script setup lang="ts">
-	import {} from 'vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
-	<h1>App</h1>
-	<svg-icon name="home" color="pink" width="20px" height="20px"></svg-icon>
+  <RouterView></RouterView>
 </template>
 
 <style lang="scss" scoped></style>
