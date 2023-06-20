@@ -4,6 +4,7 @@
   import { ref } from 'vue'
   import { useUserStore } from '@/stores/user'
   import { useRouter } from 'vue-router'
+  import { getTime } from '@/composable/useTime'
   // 登录表单数据
   const loginForm = ref({
     username: 'admin',
@@ -19,7 +20,8 @@
         // 登录成功
         ElNotification({
           type: 'success',
-          message: '登录成功，欢迎回来'
+          message: '登录成功，欢迎回来',
+          title: `Hi ${timeMessage.value}`
         })
         router.push({ name: 'home' })
       },
@@ -32,6 +34,9 @@
       }
     )
   }
+  // 获取当前时间区域
+  const timeMessage = ref('')
+  timeMessage.value = getTime()
 </script>
 
 <template>
