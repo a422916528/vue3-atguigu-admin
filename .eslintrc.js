@@ -16,7 +16,7 @@ module.exports = {
     parser: '@typescript-eslint/parser',
     jsxPragma: 'React',
     ecmaFeatures: {
-      jsx: true
+      jsx: false
     }
   },
   /* 继承已有的规则 */

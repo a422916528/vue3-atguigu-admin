@@ -15,7 +15,8 @@
       "@/*": ["src/*"]
     },
     "types": ["pinia-plugin-persist"],
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "lib": ["ES2015", "DOM"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "element-plus.d.ts"]
 }
