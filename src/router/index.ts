@@ -4,7 +4,7 @@ const menuRoutes = [
     // 数据大屏
     path: '/screen',
     name: 'screen',
-    component: () => import('@/views/screen/index.vue'),
+    component: () => import('@/views/layout/screen/index.vue'),
     meta: {
       title: '数据大屏',
       icon: 'Platform'
@@ -13,7 +13,7 @@ const menuRoutes = [
   {
     path: '/home',
     name: 'home',
-    component: () => import('@/views/home/index.vue'),
+    component: () => import('@/views/layout/home/index.vue'),
     meta: {
       title: '首页',
       icon: 'HomeFilled'
@@ -30,7 +30,7 @@ const menuRoutes = [
       {
         path: '/acl/user',
         name: 'user',
-        component: () => import('@/views/acl/user/index.vue'),
+        component: () => import('@/views/layout/acl/user/index.vue'),
         meta: {
           title: '用户管理',
           icon: 'User'
@@ -39,7 +39,7 @@ const menuRoutes = [
       {
         path: '/acl/role',
         name: 'role',
-        component: () => import('@/views/acl/role/index.vue'),
+        component: () => import('@/views/layout/acl/role/index.vue'),
         meta: {
           title: '角色管理',
           icon: 'UserFilled'
@@ -48,7 +48,7 @@ const menuRoutes = [
       {
         path: '/acl/permission',
         name: 'permission',
-        component: () => import('@/views/acl/permission/index.vue'),
+        component: () => import('@/views/layout/acl/permission/index.vue'),
         meta: {
           title: '菜单管理',
           icon: 'Operation'
@@ -67,7 +67,7 @@ const menuRoutes = [
       {
         path: '/product/trademark',
         name: 'trademark',
-        component: () => import('@/views/product/trademark/index.vue'),
+        component: () => import('@/views/layout/product/trademark/index.vue'),
         meta: {
           title: '品牌管理',
           icon: 'Coin'
@@ -76,7 +76,7 @@ const menuRoutes = [
       {
         path: '/product/attr',
         name: 'attr',
-        component: () => import('@/views/product/attr/index.vue'),
+        component: () => import('@/views/layout/product/attr/index.vue'),
         meta: {
           title: '属性管理',
           icon: 'PriceTag'
@@ -85,7 +85,7 @@ const menuRoutes = [
       {
         path: '/product/spu',
         name: 'spu',
-        component: () => import('@/views/product/spu/index.vue'),
+        component: () => import('@/views/layout/product/spu/index.vue'),
         meta: {
           title: 'spu管理',
           icon: 'GoodsFilled'
@@ -94,7 +94,7 @@ const menuRoutes = [
       {
         path: '/product/sku',
         name: 'sku',
-        component: () => import('@/views/product/sku/index.vue'),
+        component: () => import('@/views/layout/product/sku/index.vue'),
         meta: {
           title: 'spu管理',
           icon: 'WalletFilled'

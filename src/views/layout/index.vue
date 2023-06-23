@@ -1,7 +1,8 @@
 <script setup>
   import {} from 'vue'
-  import Menu from '@/components/menu/index.vue'
+  import Menu from './components/menu/index.vue'
   import { menuRoutes } from '@/router/index.ts'
+  import Tabbar from './tabbar/index.vue'
 </script>
 
 <template>
@@ -11,7 +12,7 @@
       <el-aside width="260px">
         <!-- 标题logo区 -->
         <div class="logo">
-          <img src="@/../public/logo.png" alt="" />
+          <img src="@/assets/logo.png" alt="" />
           <h1 class="title">硅谷甄选运营平台</h1>
         </div>
         <!-- 菜单 -->
@@ -19,7 +20,9 @@
       </el-aside>
       <el-container>
         <!-- 顶部 -->
-        <el-header>Header</el-header>
+        <el-header>
+          <Tabbar></Tabbar>
+        </el-header>
         <!-- 主要区域 -->
         <el-main>
           <RouterView></RouterView>
@@ -52,11 +55,10 @@
     }
   }
   .el-header {
-    background-color: skyblue;
     height: 50px;
+    padding: 0;
   }
   .el-main {
-    background-color: pink;
     height: calc(100vh - 50px);
   }
 </style>

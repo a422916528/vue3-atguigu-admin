@@ -1,5 +1,4 @@
 <script setup lang="ts">
-  import { useRouter } from 'vue-router'
   defineProps({
     // 菜单路由
     menuList: {
@@ -22,10 +21,6 @@
       default: '#fff'
     }
   })
-  const router = useRouter()
-  const toRouter = path => {
-    router.push(path)
-  }
 </script>
 <script lang="ts">
   export default {
@@ -38,41 +33,48 @@
     :active-text-color="activeTextColor"
     :background-color="bgc"
     class="el-menu-vertical-demo"
-    default-active="2"
     :text-color="textColor"
+    :default-active="$route.path"
+    :router="true"
   >
     <template v-for="item in (menuList as any)" :key="item.path">
       <!-- 没有子路由 -->
-      <el-menu-item v-if="!item.children" :index="item.path" @click="toRouter(item.path)">
-        <span>
-          <el-icon>
-            <component :is="item.meta?.icon"></component>
-          </el-icon>
-        </span>
-        <span>{{ item.meta?.title }}</span>
+      <el-menu-item v-if="!item.children" :index="item.path">
+        <el-icon>
+          <component :is="item.meta?.icon"></component>
+        </el-icon>
+        <template #title>
+          <span>{{ item.meta?.title }}</span>
+        </template>
       </el-menu-item>
       <!-- 有子路由且只有一个 -->
       <el-menu-item
         v-if="item.children && item.children.length == 1"
         :index="item.children[0].path"
-        @click="toRouter(item.path)"
       >
-        <span>
-          <el-icon>
-            <component :is="item.children[0].meta?.icon"></component>
-          </el-icon>
-        </span>
-        <span>{{ item.children[0].meta.title }}</span>
+        <el-icon>
+          <component :is="item.children[0].meta?.icon"></component>
+        </el-icon>
+        <template #title>
+          <span>{{ item.children[0].meta.title }}</span>
+        </template>
       </el-menu-item>
       <!-- 有子路由并且有多个 -->
-      <el-sub-menu v-if="item.children && item.children.length > 1" :index="item.path">
+      <el-sub-menu :index="item.path" v-if="item.children && item.children.length > 1">
         <template #title>
           <el-icon>
             <component :is="item.meta?.icon"></component>
           </el-icon>
           <span>{{ item.meta?.title }}</span>
         </template>
-        <Menu :menuList="item.children"></Menu>
+        <el-menu-item-group v-for="sub in item.children" :key="sub.path">
+          <el-menu-item :index="sub.path">
+            <el-icon>
+              <component :is="sub.meta?.icon"></component>
+            </el-icon>
+            {{ sub.meta?.title }}
+          </el-menu-item>
+        </el-menu-item-group>
       </el-sub-menu>
     </template>
   </el-menu>
