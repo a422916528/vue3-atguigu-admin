@@ -22,6 +22,7 @@ const menuRoutes = [
   {
     path: '/acl',
     name: 'acl',
+    redirect: 'user',
     meta: {
       title: '权限管理',
       icon: 'Lock'
@@ -59,6 +60,7 @@ const menuRoutes = [
   {
     path: '/product',
     name: 'product',
+    redirect: 'trademark',
     meta: {
       title: '商品管理',
       icon: 'ShoppingCart'

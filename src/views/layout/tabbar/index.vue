@@ -15,13 +15,24 @@
   <div class="tabbar">
     <!-- 左侧 -->
     <div class="tabbar_left">
-      <el-icon style="margin-right: 10px; cursor: pointer" @click="changeIcon">
+      <el-icon
+        style="margin-right: 10px; cursor: pointer; transform: translateY(2px)"
+        @click="changeIcon"
+      >
         <component :is="menuFold ? 'Fold' : 'Expand'"></component>
       </el-icon>
       <!-- 面包屑 -->
       <el-breadcrumb separator=">">
-        <el-breadcrumb-item :to="{ path: '/' }">权限管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/' }">用户管理</el-breadcrumb-item>
+        <el-breadcrumb-item
+          v-for="item in $route.matched.slice(1)"
+          :key="item.path"
+          :to="{ path: item.path }"
+        >
+          <el-icon style="margin-right: 5px; transform: translateY(2px)">
+            <component :is="item.meta.icon"></component>
+          </el-icon>
+          <span>{{ item.meta.title }}</span>
+        </el-breadcrumb-item>
       </el-breadcrumb>
     </div>
     <!-- 右侧 -->
