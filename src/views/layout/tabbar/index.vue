@@ -1,13 +1,22 @@
 <script setup lang="ts">
-  import {} from 'vue'
+  import { ref } from 'vue'
+  import { useMenuStore } from '@/stores/menu'
+  const menuStore = useMenuStore()
+  // 点击图标回调
+  const changeIcon = () => {
+    menuFold.value = !menuFold.value
+    menuStore.changeFold(menuFold.value)
+  }
+  // 菜单折叠控制变量
+  const menuFold = ref(false)
 </script>
 
 <template>
   <div class="tabbar">
     <!-- 左侧 -->
     <div class="tabbar_left">
-      <el-icon style="margin-right: 10px">
-        <Expand></Expand>
+      <el-icon style="margin-right: 10px; cursor: pointer" @click="changeIcon">
+        <component :is="menuFold ? 'Fold' : 'Expand'"></component>
       </el-icon>
       <!-- 面包屑 -->
       <el-breadcrumb separator=">">

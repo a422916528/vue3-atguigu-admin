@@ -19,6 +19,11 @@
     textColor: {
       type: String,
       default: '#fff'
+    },
+    // 菜单是否折叠
+    menuFold: {
+      type: Boolean,
+      default: false
     }
   })
 </script>
@@ -36,6 +41,7 @@
     :text-color="textColor"
     :default-active="$route.path"
     :router="true"
+    :collapse="menuFold"
   >
     <template v-for="item in (menuList as any)" :key="item.path">
       <!-- 没有子路由 -->
