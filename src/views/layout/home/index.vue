@@ -1,5 +1,12 @@
 <script setup>
-  import {} from 'vue'
+  import { onMounted } from 'vue'
+  import { useUserStore } from '@/stores/user.ts'
+  const userStore = useUserStore()
+
+  onMounted(() => {
+    // 获取用户信息并存储到 pinia 中
+    userStore.getUserInfo()
+  })
 </script>
 
 <template>

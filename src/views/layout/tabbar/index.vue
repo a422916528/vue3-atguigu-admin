@@ -2,6 +2,7 @@
   import { ref } from 'vue'
   import { useMenuStore } from '@/stores/menu'
   import { useTabbarStore } from '@/stores/tabber'
+  import { useUserStore } from '@/stores/user'
   const menuStore = useMenuStore()
   // 点击图标回调
   const changeIcon = () => {
@@ -32,6 +33,9 @@
       document.exitFullscreen()
     }
   }
+
+  // 获取用户信息
+  const userStore = useUserStore()
 </script>
 
 <template>
@@ -63,11 +67,15 @@
       <el-button circle icon="Refresh" @click="refresh"></el-button>
       <el-button circle icon="FullScreen" @click="fullScreen"></el-button>
       <el-button circle icon="Setting"></el-button>
-      <img src="@/assets/logo.png" alt="" style="width: 24px; height: 24px; margin: 0 10px" />
+      <img
+        :src="userStore.userInfo.avatar"
+        alt=""
+        style="width: 24px; height: 24px; margin: 0 10px; border-radius: 50%"
+      />
       <!-- 下拉菜单 -->
       <el-dropdown>
         <span class="el-dropdown-link">
-          Dropdown List
+          {{ userStore.userInfo.username }}
           <el-icon class="el-icon--right">
             <arrow-down />
           </el-icon>

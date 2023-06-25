@@ -1,4 +1,6 @@
 import axios from 'axios'
+// 引入用户信息仓库
+import { useUserStore } from '@/stores/user.ts'
 // 创建axios实例
 const request = axios.create({
   // 基础路径
@@ -14,6 +16,11 @@ request.interceptors.request.use(
     // 在发送请求之前做些什么
     // Loading 加载
     loadingInstance = ElLoading.service({ fullscreen: true })
+    // 请求头添加 token
+    const userStore = useUserStore()
+    if (userStore.userInfo.token) {
+      config.headers.token = userStore.userInfo.token
+    }
     return config
   },
   function (error) {

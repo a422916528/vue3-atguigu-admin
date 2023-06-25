@@ -1,14 +1,16 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { reqLogin } from '@/api/user/user'
+import { reqLogin, reqUserInfo } from '@/api/user/user'
 import type { loginForm } from '@/api/user/type'
 
 export const useUserStore = defineStore(
   'user',
   () => {
     // 用户数据信息
-    const userInfo = <string>ref({
-      token: ''
+    const userInfo = ref({
+      token: '',
+      username: '',
+      avatar: ''
     })
 
     // 用户登录
@@ -22,10 +24,17 @@ export const useUserStore = defineStore(
         return Promise.reject(new Error(res.data.message))
       }
     }
+    // 获取用户信息
+    const getUserInfo = async () => {
+      const { data: res } = await reqUserInfo()
+      userInfo.value.avatar = res.checkUser.avatar
+      userInfo.value.username = res.checkUser.username
+    }
     // 用户登录
     return {
       userInfo,
-      userLogin
+      userLogin,
+      getUserInfo
     }
   },
   {
