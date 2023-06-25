@@ -30,11 +30,18 @@ export const useUserStore = defineStore(
       userInfo.value.avatar = res.checkUser.avatar
       userInfo.value.username = res.checkUser.username
     }
+    // 提出登录
+    const userLogout = () => {
+      userInfo.value.token = ''
+      userInfo.value.username = ''
+      userInfo.value.avatar = ''
+    }
     // 用户登录
     return {
       userInfo,
       userLogin,
-      getUserInfo
+      getUserInfo,
+      userLogout
     }
   },
   {

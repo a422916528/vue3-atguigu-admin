@@ -3,6 +3,7 @@
   import { useMenuStore } from '@/stores/menu'
   import { useTabbarStore } from '@/stores/tabber'
   import { useUserStore } from '@/stores/user'
+  import { useRouter, useRoute } from 'vue-router'
   const menuStore = useMenuStore()
   // 点击图标回调
   const changeIcon = () => {
@@ -36,6 +37,19 @@
 
   // 获取用户信息
   const userStore = useUserStore()
+
+  // 退出登录
+  const router = useRouter()
+  const route = useRoute()
+  const logout = () => {
+    userStore.userLogout()
+    // eslint-disable-next-line no-undef
+    ElMessage({
+      type: 'success',
+      message: '退出成功，请重新登陆'
+    })
+    router.push({ name: 'login', query: { redirect: route.path } })
+  }
 </script>
 
 <template>
@@ -82,7 +96,7 @@
         </span>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item @click="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>

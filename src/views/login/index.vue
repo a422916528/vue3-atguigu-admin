@@ -3,7 +3,7 @@
   import { User, Lock } from '@element-plus/icons-vue'
   import { ref } from 'vue'
   import { useUserStore } from '@/stores/user'
-  import { useRouter } from 'vue-router'
+  import { useRouter, useRoute } from 'vue-router'
   import { getTime } from '@/composable/useTime'
   // 登录表单数据
   const refLoginForm = ref(null)
@@ -14,6 +14,7 @@
 
   const userStore = useUserStore()
   const router = useRouter()
+  const route = useRoute()
   // 登录回调
   const login = () => {
     refLoginForm.value.validate((isValid: boolean) => {
@@ -27,7 +28,7 @@
               message: '登录成功，欢迎回来',
               title: `Hi ${timeMessage.value}`
             })
-            router.push({ name: 'home' })
+            router.push({ path: (route.query.redirect as string) || '/' })
           },
           // 登录失败
           error => {
