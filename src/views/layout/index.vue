@@ -4,6 +4,7 @@
   import { menuRoutes } from '@/router/index.ts'
   import Tabbar from './tabbar/index.vue'
   import { useMenuStore } from '@/stores/menu.ts'
+  import Main from './main/index.vue'
   const menuStore = useMenuStore()
 </script>
 
@@ -27,7 +28,7 @@
         </el-header>
         <!-- 主要区域 -->
         <el-main>
-          <RouterView></RouterView>
+          <Main></Main>
         </el-main>
       </el-container>
     </el-container>

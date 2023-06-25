@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
   import { useMenuStore } from '@/stores/menu'
+  import { useTabbarStore } from '@/stores/tabber'
   const menuStore = useMenuStore()
   // 点击图标回调
   const changeIcon = () => {
@@ -9,6 +10,28 @@
   }
   // 菜单折叠控制变量
   const menuFold = ref(false)
+
+  // 刷新按钮功能
+  const tabbarStore = useTabbarStore()
+  const refreshVal = ref(false)
+  // 点击刷新按钮的回调
+  const refresh = () => {
+    refreshVal.value = !refreshVal.value
+    // 通知 main 销毁并重新创建组件
+    tabbarStore.clickRefresh(refreshVal.value)
+  }
+
+  //全屏功能
+  const fullScreen = () => {
+    // 判断是否为全屏
+    let full = document.fullscreenElement
+    if (!full) {
+      // 全屏
+      document.documentElement.requestFullscreen()
+    } else {
+      document.exitFullscreen()
+    }
+  }
 </script>
 
 <template>
@@ -37,8 +60,8 @@
     </div>
     <!-- 右侧 -->
     <div class="tabbar_right">
-      <el-button circle icon="Refresh"></el-button>
-      <el-button circle icon="FullScreen"></el-button>
+      <el-button circle icon="Refresh" @click="refresh"></el-button>
+      <el-button circle icon="FullScreen" @click="fullScreen"></el-button>
       <el-button circle icon="Setting"></el-button>
       <img src="@/assets/logo.png" alt="" style="width: 24px; height: 24px; margin: 0 10px" />
       <!-- 下拉菜单 -->
