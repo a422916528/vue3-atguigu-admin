@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css'
 const menuRoutes = [
   {
     // 数据大屏
@@ -142,6 +144,14 @@ const router = createRouter({
     }
   }
 })
-
+// 前置守卫
+router.beforeEach((to, from, next) => {
+  nprogress.start()
+  next()
+})
+// 后置守卫
+router.afterEach(() => {
+  nprogress.done()
+})
 // export default router
 export { router, menuRoutes }
