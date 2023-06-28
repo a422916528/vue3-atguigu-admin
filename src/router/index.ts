@@ -1,6 +1,11 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
+import { useUserStore } from '@/stores/user'
+import pinia from '@/stores'
+
+nprogress.configure({ showSpinner: false })
+
 const menuRoutes = [
   {
     // 数据大屏
@@ -146,8 +151,28 @@ const router = createRouter({
 })
 // 前置守卫
 router.beforeEach((to, from, next) => {
+  document.title = `硅谷甄选-${to.meta.title}`
   nprogress.start()
-  next()
+  const userStore = useUserStore(pinia)
+  // 获取token
+  const token = userStore.userInfo.token
+  console.log(token)
+  if (token) {
+    // 用户已登录
+    if (to.path === '/login') {
+      next({ path: '/' })
+    } else {
+      next()
+    }
+  } else {
+    // 用户未登录
+    if (to.path === '/login') {
+      next()
+    } else {
+      next({ path: '/login', query: { redirect: to.path } })
+    }
+  }
+  //
 })
 // 后置守卫
 router.afterEach(() => {

@@ -27,6 +27,7 @@ export const useUserStore = defineStore(
     // 获取用户信息
     const getUserInfo = async () => {
       const { data: res } = await reqUserInfo()
+      console.log(res)
       userInfo.value.avatar = res.checkUser.avatar
       userInfo.value.username = res.checkUser.username
     }
