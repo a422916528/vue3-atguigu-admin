@@ -5,19 +5,29 @@
   // 当前页数
   const pageOn = ref(1)
   // 每页展示多少条数据
-  const limit = ref(3)
+  const limit = ref(5)
   // 已有品牌数据总数
   const total = ref(0)
   // 已有品牌数据
   const trademarkArr = ref<Records>([])
-  // 获取已有品牌
+  // 获取已有品牌方法
   const getHasTrademark = async () => {
     const res: TrademarkResponseData = await reqHasTrademark(pageOn.value, limit.value)
-    console.log(res)
     if (res.code === 200) {
       total.value = res.data.total
       trademarkArr.value = res.data.records
     }
+  }
+  // 条/页被点击时
+  const sizeChange = (size: number) => {
+    limit.value = size
+    pageOn.value = 1
+    getHasTrademark()
+  }
+  // 页面数被改变时
+  const currentChange = (page: number) => {
+    pageOn.value = page
+    getHasTrademark()
   }
   onMounted(() => {
     getHasTrademark()
@@ -51,6 +61,8 @@
       layout=" prev, pager, next, ->, jumper, sizes, total"
       :total="total"
       style="margin-top: 20px"
+      @size-change="sizeChange"
+      @current-change="currentChange"
     />
   </el-card>
 </template>
