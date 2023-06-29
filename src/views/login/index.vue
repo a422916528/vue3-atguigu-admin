@@ -9,7 +9,7 @@
   const refLoginForm = ref(null)
   const loginForm = ref({
     username: 'admin',
-    password: '111111'
+    password: 'atguigu123'
   })
 
   const userStore = useUserStore()

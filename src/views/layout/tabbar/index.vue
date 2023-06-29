@@ -41,8 +41,8 @@
   // 退出登录
   const router = useRouter()
   const route = useRoute()
-  const logout = () => {
-    userStore.userLogout()
+  const logout = async () => {
+    await userStore.userLogout()
     // eslint-disable-next-line no-undef
     ElMessage({
       type: 'success',

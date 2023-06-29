@@ -156,7 +156,6 @@ router.beforeEach((to, from, next) => {
   const userStore = useUserStore(pinia)
   // 获取token
   const token = userStore.userInfo.token
-  console.log(token)
   if (token) {
     // 用户已登录
     if (to.path === '/login') {

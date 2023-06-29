@@ -1,7 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-import { reqLogin, reqUserInfo } from '@/api/user/user'
-import type { loginForm } from '@/api/user/type'
+import { reqLogin, reqUserInfo, reqLogout } from '@/api/user/user'
 
 export const useUserStore = defineStore(
   'user',
@@ -14,28 +13,38 @@ export const useUserStore = defineStore(
     })
 
     // 用户登录
-    const userLogin = async (data: loginForm) => {
+    const userLogin = async (data: any) => {
       const res = await reqLogin(data)
       if (res.code === 200) {
         // 登录成功
-        userInfo.value.token = res.data.token
+        userInfo.value.token = res.data
         return Promise.resolve('登录成功')
       } else {
-        return Promise.reject(new Error(res.data.message))
+        return Promise.reject(new Error(res.data))
       }
     }
     // 获取用户信息
     const getUserInfo = async () => {
-      const { data: res } = await reqUserInfo()
-      console.log(res)
-      userInfo.value.avatar = res.checkUser.avatar
-      userInfo.value.username = res.checkUser.username
+      const res = await reqUserInfo()
+      if (res.code == 200) {
+        userInfo.value.avatar = res.data.avatar
+        userInfo.value.username = res.data.name
+      } else {
+        return Promise.reject(new Error(res.message))
+      }
     }
-    // 提出登录
-    const userLogout = () => {
-      userInfo.value.token = ''
-      userInfo.value.username = ''
-      userInfo.value.avatar = ''
+    // 退出登录
+    const userLogout = async () => {
+      const res = await reqLogout()
+      if (res.code === 200) {
+        // 退出成功
+        userInfo.value.token = ''
+        userInfo.value.username = ''
+        userInfo.value.avatar = ''
+        return 'ok'
+      } else {
+        return Promise.reject(new Error(res.message))
+      }
     }
     // 用户登录
     return {
