@@ -1,32 +1,35 @@
+// 用户接口数据相关类型
+
 // 登录接口携带参数类型
-export interface loginForm {
+export interface loginFromData {
   username: string
   password: string
 }
-interface dataType {
-  token?: string
-  message?: string
-}
-// 登录接口返回数据类型
-export interface loginResponseData {
+
+// 所有接口返回的公有类型
+interface responseData {
   code: number
-  data: dataType
+  message: string
+  ok: boolean
 }
-//用户信息返回类型
-interface userInfo {
-  userId: number
-  avatar: string
-  username: string
-  password: string
-  desc: string
-  roles: string[]
-  buttons: string[]
-  router: string
+
+// 登录接口返回的类型
+export interface loginResponseData extends responseData {
+  data: string
 }
-interface user {
-  checkUser: userInfo
+
+// 获取用户信息返回的类型
+export interface userInfoResponseData extends responseData {
+  data: {
+    routes: string[]
+    buttons: string[]
+    roles: string[]
+    name: string
+    avatar: string
+  }
 }
-export interface userResponseData {
-  code: number
-  data: user
+
+// 退出登录返回的类型
+export interface logoutResponseData extends responseData {
+  data: any
 }

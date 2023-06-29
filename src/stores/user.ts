@@ -1,6 +1,12 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { reqLogin, reqUserInfo, reqLogout } from '@/api/user/user'
+import type {
+  loginFromData,
+  loginResponseData,
+  userInfoResponseData,
+  logoutResponseData
+} from '@/api/user/type'
 
 export const useUserStore = defineStore(
   'user',
@@ -13,8 +19,8 @@ export const useUserStore = defineStore(
     })
 
     // 用户登录
-    const userLogin = async (data: any) => {
-      const res = await reqLogin(data)
+    const userLogin = async (data: loginFromData) => {
+      const res: loginResponseData = await reqLogin(data)
       if (res.code === 200) {
         // 登录成功
         userInfo.value.token = res.data
@@ -25,7 +31,7 @@ export const useUserStore = defineStore(
     }
     // 获取用户信息
     const getUserInfo = async () => {
-      const res = await reqUserInfo()
+      const res: userInfoResponseData = await reqUserInfo()
       if (res.code == 200) {
         userInfo.value.avatar = res.data.avatar
         userInfo.value.username = res.data.name
@@ -35,7 +41,7 @@ export const useUserStore = defineStore(
     }
     // 退出登录
     const userLogout = async () => {
-      const res = await reqLogout()
+      const res: logoutResponseData = await reqLogout()
       if (res.code === 200) {
         // 退出成功
         userInfo.value.token = ''
