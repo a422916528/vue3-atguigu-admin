@@ -1,5 +1,6 @@
 //  品牌管理接口
 import request from '@/utils/request'
+import type { TrademarkResponseData } from './type'
 enum API {
   // 获取已有的品牌接口
   TRADEMARK_URL = '/admin/product/baseTrademark/'
@@ -11,5 +12,5 @@ enum API {
  * @param limit 获取几个已有品牌的数据
  */
 export const reqHasTrademark = (page: number, limit: number) => {
-  return request.get<any>(API.TRADEMARK_URL + `${page}/${limit}`)
+  return request.get<any, TrademarkResponseData>(API.TRADEMARK_URL + `${page}/${limit}`)
 }
