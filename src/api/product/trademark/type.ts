@@ -1,14 +1,14 @@
 // 品牌管理接口数据相关类型
 
 // 公共类型
-interface ResponseData {
+export interface ResponseData {
   code: number
   message: string
   ok: boolean
 }
 
 // 已有品牌类型
-interface Trademark {
+export interface Trademark {
   id?: number
   tmName: string
   logoUrl: string
