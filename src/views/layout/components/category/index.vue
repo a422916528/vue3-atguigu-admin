@@ -7,6 +7,11 @@
     category1: {
       type: Array,
       default: () => []
+    },
+    // 是否禁用
+    disabled: {
+      type: Boolean,
+      default: false
     }
   })
   // 存储一级分类的 id
@@ -43,7 +48,6 @@
   const select3Change = (id: number) => {
     // 将三级分类 id 存储到仓库中
     categoryStore.getCategory3Id(id)
-    console.log('分类选择完毕，准备获取符合条件的商品属性')
   }
 </script>
 
@@ -56,6 +60,7 @@
           placeholder="请选择"
           size="large"
           v-model="category1Id"
+          :disabled="!disabled"
           @change="select1Change"
         >
           <el-option
@@ -72,6 +77,7 @@
           placeholder="请选择"
           size="large"
           v-model="category2Id"
+          :disabled="!disabled"
           @change="select2Change"
         >
           <el-option
@@ -88,6 +94,7 @@
           placeholder="请选择"
           size="large"
           v-model="category3Id"
+          :disabled="!disabled"
           @change="select3Change"
         >
           <el-option
