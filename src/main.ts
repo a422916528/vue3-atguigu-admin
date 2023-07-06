@@ -8,6 +8,8 @@ import ElementPlus from 'element-plus'
 import zhCn from 'element-plus/dist/locale/zh-cn.mjs'
 // 引入全局组件注册
 import globalCom from '@/components/index'
+// 引入全局自定义指令注册
+import globalDirective from '@/directives/index'
 // 引入全局样式
 import '@/styles/index.scss'
 
@@ -19,5 +21,6 @@ app.use(ElementPlus, {
   locale: zhCn
 })
 app.use(globalCom)
+app.use(globalDirective)
 
 app.mount('#app')

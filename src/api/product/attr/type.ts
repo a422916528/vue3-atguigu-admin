@@ -20,18 +20,20 @@ export interface CategoryResponseData extends ResponseData {
 
 // 属性值对象的数据类型
 export interface AttrData {
-  id: number
+  id?: number
   valueName: string
-  attrId: number
+  attrId?: number
+  show?: boolean
 }
 // 存储每一个属性值的数据类型
 export type AttrValueList = AttrData[]
 // 属性的数据类型
-interface Attr {
-  id: number
+export interface Attr {
+  id?: number
   attrName: string
-  categoryId: number
+  categoryId: number | string
   categoryLevel: number
+  attrValueList: AttrValueList
 }
 // 存储每一个属性对象的数组类型
 export type AttrList = Attr[]
