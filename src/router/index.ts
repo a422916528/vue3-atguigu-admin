@@ -105,7 +105,7 @@ const menuRoutes = [
         name: 'sku',
         component: () => import('@/views/layout/product/sku/index.vue'),
         meta: {
-          title: 'spu管理',
+          title: 'sku管理',
           icon: 'WalletFilled'
         }
       }
