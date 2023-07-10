@@ -28,7 +28,6 @@
   }
   // 储存已有属性与属性值
   const attrArr = ref<AttrList>([])
-
   // 切换属性查看和属性添加或编辑控制变量
   const flag = ref(true)
   // 点击取消按钮的回调
@@ -60,7 +59,7 @@
   // 点击添加属性按钮的回调
   const addAttr = () => {
     // 如果输入的属性值为空，则不添加数据
-    if (attrValueisEmpty())
+    if (attrValueIsEmpty())
       // eslint-disable-next-line no-undef
       return ElMessage({
         type: 'warning',
@@ -77,7 +76,7 @@
     })
   }
   // 判断属性值中是否有为空的方法
-  const attrValueisEmpty = () => {
+  const attrValueIsEmpty = () => {
     if (attrAddParams.value.attrValueList.length > 0) {
       if (attrAddParams.value.attrValueList.find(item => item.valueName === ''))
         // eslint-disable-next-line no-undef
@@ -99,7 +98,7 @@
       })
     }
     // 属性值其中有空数据
-    if (attrValueisEmpty())
+    if (attrValueIsEmpty())
       // eslint-disable-next-line no-undef
       return ElMessage({
         type: 'warning',
@@ -178,6 +177,7 @@
   const inputArr = ref([])
   // 点击编辑按钮修改已有的属性的回调
   const updateAttr = (row: Attr) => {
+    console.log(row)
     flag.value = false
     Object.assign(attrAddParams.value, JSON.parse(JSON.stringify(row)))
   }
@@ -231,12 +231,7 @@
               </template>
             </el-popconfirm>
             <!-- 编辑按钮 -->
-            <el-button
-              type="primary"
-              icon="Edit"
-              size="small"
-              @click="updateAttr(row.id)"
-            ></el-button>
+            <el-button type="primary" icon="Edit" size="small" @click="updateAttr(row)"></el-button>
           </template>
         </el-table-column>
       </el-table>
