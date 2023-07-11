@@ -8,7 +8,7 @@
   import { SPUListData, SPUData } from '@/api/product/spu/type'
 
   // 场景切换变量
-  const scene = ref(2) // 0: 显示已有的 SPU，1：添加 | 修改 SPU，2：添加 SKU
+  const scene = ref(0) // 0: 显示已有的 SPU，1：添加 | 修改 SPU，2：添加 SKU
   // 分页器当前页面
   const pageNo = ref(1)
   // 分页器每页显示多少条数
@@ -66,10 +66,14 @@
     scene.value = 1
     pageNo.value = 1
   }
+  // 获取子组件实例
+  const skuFormRef = ref(null)
   // 点击添加 SKU 按钮的回调
-  const addSku = () => {
+  const addSku = (row: SPUData) => {
     // 切换场景2
     scene.value = 2
+    // 调用子组件初始化方法
+    skuFormRef.value.initSkuData(categoryStore.category1Id, categoryStore.category2Id, row)
   }
   onMounted(() => {
     // 获取一级分类的数据
@@ -95,7 +99,7 @@
               size="small"
               icon="Plus"
               title="添加SKU"
-              @click="addSku"
+              @click="addSku(row)"
             ></el-button>
             <el-button
               type="info"
@@ -123,7 +127,7 @@
     <!-- SPU 添加 | 修改子组件 -->
     <SpuForm v-show="scene === 1" ref="spuFormRef" @changeScene="changeScene"></SpuForm>
     <!-- SKU 子组件 -->
-    <SkuForm v-show="scene === 2"></SkuForm>
+    <SkuForm v-show="scene === 2" ref="skuFormRef" @changeScene="changeScene"></SkuForm>
   </el-card>
 </template>
 

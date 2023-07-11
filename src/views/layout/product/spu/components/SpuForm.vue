@@ -186,7 +186,7 @@
       })
     } else {
       ElMessage({
-        type: 'success',
+        type: 'error',
         message: spuParams.value.id ? '修改失败' : '添加失败'
       })
     }

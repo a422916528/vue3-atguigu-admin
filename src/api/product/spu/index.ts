@@ -7,7 +7,8 @@ import type {
   ResSpuImageData,
   ResSaleAttrData,
   ResHasSaleAttr,
-  SPUData
+  SPUData,
+  ResSkuData
 } from './type'
 
 enum API {
@@ -24,22 +25,33 @@ enum API {
   // 追加新的 SPU
   ADDSPU_URL = 'admin/product/saveSpuInfo',
   // 更新已有的 SPU
-  UPDATESPU_URL = 'admin/product/updateSpuInfo'
+  UPDATESPU_URL = 'admin/product/updateSpuInfo',
+  // 添加一个 SKU
+  ADDSKU_URL = '/admin/product/saveSkuInfo'
 }
 
 // 获取某一个三级分类下已有的 SPU 数据
-export const reqHasSPU = (page: number, limit: number, category3Id: number | string) =>
-  request.get<any, ResSPUData>(API.HASSPU_URL + `${page}/${limit}?category3Id=${category3Id}`)
+export const reqHasSPU = (page: number, limit: number, category3Id: number | string) => {
+  return request.get<any, ResSPUData>(
+    API.HASSPU_URL + `${page}/${limit}?category3Id=${category3Id}`
+  )
+}
 // 获取全部 SPU 品牌的数据
-export const reqAllTrademark = () => request.get<any, ResAllTrademarkData>(API.ALLTRADEMARK_URL)
+export const reqAllTrademark = () => {
+  return request.get<any, ResAllTrademarkData>(API.ALLTRADEMARK_URL)
+}
 // 获取某一个 SPU 下全部商品的图片数据
-export const reqSpuImageList = (spuId: number) =>
-  request.get<any, ResSpuImageData>(API.IMAGE_URL + spuId)
+export const reqSpuImageList = (spuId: number) => {
+  return request.get<any, ResSpuImageData>(API.IMAGE_URL + spuId)
+}
 // 获取 SPU 下已有的销售属性数据
-export const reqSpuSaleAttr = (spuId: number) =>
-  request.get<any, ResSaleAttrData>(API.SALEATTR_URL + spuId)
+export const reqSpuSaleAttr = (spuId: number) => {
+  return request.get<any, ResSaleAttrData>(API.SALEATTR_URL + spuId)
+}
 // 获取全部的销售属性[颜色、版本、尺码]
-export const reqAllSaleAttr = () => request.get<any, ResHasSaleAttr>(API.ALLSALEATTR_URL)
+export const reqAllSaleAttr = () => {
+  return request.get<any, ResHasSaleAttr>(API.ALLSALEATTR_URL)
+}
 // 添加 | 更新 SPU
 export const reqAddOrUpdateSpu = (data: SPUData) => {
   if (data.id) {
@@ -49,4 +61,8 @@ export const reqAddOrUpdateSpu = (data: SPUData) => {
     // 添加
     return request.post<any, ResponseData>(API.ADDSPU_URL, data)
   }
+}
+// 添加一个 SKU
+export const reqAddSku = (sku: any) => {
+  return request.post<any, ResSkuData>(API.ADDSKU_URL, sku)
 }
