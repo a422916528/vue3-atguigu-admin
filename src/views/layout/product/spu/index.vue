@@ -4,8 +4,8 @@
   import SkuForm from './components/SkuForm.vue'
   import { ref, watch, onMounted } from 'vue'
   import { useCategoryStore } from '@/stores/category'
-  import { reqHasSPU } from '@/api/product/spu/index'
-  import { SPUListData, SPUData } from '@/api/product/spu/type'
+  import { reqHasSPU, reqSkuList } from '@/api/product/spu/index'
+  import type { SPUListData, SPUData, ResSkuData } from '@/api/product/spu/type'
 
   // 场景切换变量
   const scene = ref(0) // 0: 显示已有的 SPU，1：添加 | 修改 SPU，2：添加 SKU
@@ -75,6 +75,22 @@
     // 调用子组件初始化方法
     skuFormRef.value.initSkuData(categoryStore.category1Id, categoryStore.category2Id, row)
   }
+
+  // 存储 SPU 下 SKU 的数据
+  const skuArr = ref<ResSkuData[]>([])
+  // 点击查看 SKU 按钮的回调
+  const findSku = async (row: SPUData) => {
+    const res = await reqSkuList(row.id as number)
+    console.log(res)
+    if (res.code === 200) {
+      skuArr.value = res.data
+      // 显示 SKU 对话框
+      show.value = true
+    }
+  }
+  // 控制查看 SKU 详情显示或隐藏
+  const show = ref(false)
+
   onMounted(() => {
     // 获取一级分类的数据
     categoryStore.getCategory1Data()
@@ -108,7 +124,13 @@
               title="修改"
               @click="update(row)"
             ></el-button>
-            <el-button type="primary" size="small" icon="View" title="查看"></el-button>
+            <el-button
+              type="primary"
+              size="small"
+              icon="View"
+              title="查看"
+              @click="findSku(row)"
+            ></el-button>
             <el-button type="danger" size="small" icon="Delete" title="删除"></el-button>
           </template>
         </el-table-column>
@@ -128,6 +150,19 @@
     <SpuForm v-show="scene === 1" ref="spuFormRef" @changeScene="changeScene"></SpuForm>
     <!-- SKU 子组件 -->
     <SkuForm v-show="scene === 2" ref="skuFormRef" @changeScene="changeScene"></SkuForm>
+    <!-- 查看 SKU 详情 -->
+    <el-dialog title="SKU列表" v-model="show">
+      <el-table border :data="skuArr">
+        <el-table-column label="SKU名字" prop="skuName"></el-table-column>
+        <el-table-column label="SKU价格(元)" prop="price"></el-table-column>
+        <el-table-column label="SKU重量(克)" prop="weight"></el-table-column>
+        <el-table-column label="SKU图片">
+          <template v-slot="{ row }">
+            <img :src="row.skuDefaultImg" alt="" style="width: 100px; height: 100px" />
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-dialog>
   </el-card>
 </template>
 

@@ -8,7 +8,8 @@ import type {
   ResSaleAttrData,
   ResHasSaleAttr,
   SPUData,
-  ResSkuData
+  ResSkuData,
+  SkuInfoData
 } from './type'
 
 enum API {
@@ -27,7 +28,9 @@ enum API {
   // 更新已有的 SPU
   UPDATESPU_URL = 'admin/product/updateSpuInfo',
   // 添加一个 SKU
-  ADDSKU_URL = '/admin/product/saveSkuInfo'
+  ADDSKU_URL = '/admin/product/saveSkuInfo',
+  // 查看某一个已有的 SPU 下的全部 SKU
+  SKUINFO_URL = '/admin/product/findBySpuId/'
 }
 
 // 获取某一个三级分类下已有的 SPU 数据
@@ -65,4 +68,8 @@ export const reqAddOrUpdateSpu = (data: SPUData) => {
 // 添加一个 SKU
 export const reqAddSku = (sku: any) => {
   return request.post<any, ResSkuData>(API.ADDSKU_URL, sku)
+}
+// 查看某一个已有的 SPU 下的全部 SKU
+export const reqSkuList = (skuId: number) => {
+  return request.get<any, SkuInfoData>(API.SKUINFO_URL + skuId)
 }

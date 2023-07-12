@@ -117,3 +117,8 @@ interface SaleAttrValueListData {
   saleAttrId: number | string //属性ID
   saleAttrValueId: number | string //属性值的ID
 }
+
+// 获取某个 SPU 下的 SKU 数据类型
+export interface SkuInfoData extends ResponseData {
+  data: ResSkuData[]
+}
