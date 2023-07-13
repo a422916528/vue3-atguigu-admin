@@ -1,10 +1,11 @@
+<!-- eslint-disable no-undef -->
 <script setup lang="ts">
   import Category from '@/views/layout/components/category/index.vue'
   import SpuForm from './components/SpuForm.vue'
   import SkuForm from './components/SkuForm.vue'
   import { ref, watch, onMounted } from 'vue'
   import { useCategoryStore } from '@/stores/category'
-  import { reqHasSPU, reqSkuList } from '@/api/product/spu/index'
+  import { reqHasSPU, reqSkuList, reqDelSpu } from '@/api/product/spu/index'
   import type { SPUListData, SPUData, ResSkuData } from '@/api/product/spu/type'
 
   // 场景切换变量
@@ -91,6 +92,23 @@
   // 控制查看 SKU 详情显示或隐藏
   const show = ref(false)
 
+  // 点击删除按钮的回调
+  const deleteSpu = async (id: number) => {
+    const res = await reqDelSpu(id)
+    console.log(res)
+    if (res.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      getHasSPU()
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '删除失败'
+      })
+    }
+  }
   onMounted(() => {
     // 获取一级分类的数据
     categoryStore.getCategory1Data()
@@ -131,7 +149,15 @@
               title="查看"
               @click="findSku(row)"
             ></el-button>
-            <el-button type="danger" size="small" icon="Delete" title="删除"></el-button>
+            <el-popconfirm
+              :title="`你确定要删除${row.spuName}吗?`"
+              width="200px"
+              @confirm="deleteSpu(row.id)"
+            >
+              <template #reference>
+                <el-button type="danger" size="small" icon="Delete" title="删除"></el-button>
+              </template>
+            </el-popconfirm>
           </template>
         </el-table-column>
       </el-table>
