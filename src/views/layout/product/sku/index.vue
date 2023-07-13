@@ -1,7 +1,7 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { reqSkuList, reqOnSaleSKu, reqCancelSaleSku } from '@/api/product/sku/index'
+  import { reqSkuList, reqOnSaleSKu, reqCancelSaleSku, reqSkuInfo } from '@/api/product/sku/index'
   import type { SkuData } from '@/api/product/sku/type'
   // 分页器当前页
   const pageNo = ref(1)
@@ -63,6 +63,16 @@
       message: '此功能还在开发中~~~'
     })
   }
+  // 控制商品详情抽屉的显示与隐藏
+  const drawer = ref(false)
+  // 存储 SKU 详情
+  const skuInfo = ref<SkuData>({})
+  // 点击详情按钮的回调
+  const infoShow = async (skuId: number) => {
+    drawer.value = true
+    const res = await reqSkuInfo(skuId)
+    skuInfo.value = res.data
+  }
   onMounted(() => {
     getSku()
   })
@@ -91,7 +101,13 @@
             @click="updateSale(row)"
           ></el-button>
           <el-button type="info" size="small" icon="Edit" title="编辑" @click="toLook"></el-button>
-          <el-button type="primary" size="small" icon="InfoFilled" title="详情"></el-button>
+          <el-button
+            type="primary"
+            size="small"
+            icon="InfoFilled"
+            title="详情"
+            @click="infoShow(row.id)"
+          ></el-button>
           <el-popconfirm title="你确定要删除吗?" width="200px" @confirm="deleteSku(row)">
             <template #reference>
               <el-button type="danger" size="small" icon="Delete" title="删除"></el-button>
@@ -111,7 +127,82 @@
       @size-change="handleSizeChange"
       style="margin-top: 20px"
     />
+    <!-- 抽屉组件，展示商品详情 -->
+    <el-drawer v-model="drawer" title="I am the title" :with-header="false">
+      <span>商品详情</span>
+      <el-row>
+        <el-col :span="8">名称</el-col>
+        <el-col :span="16">{{ skuInfo.skuName }}</el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">描述</el-col>
+        <el-col :span="16">{{ skuInfo.skuDesc }}</el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">价格</el-col>
+        <el-col :span="16">{{ skuInfo.price }}</el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">平台属性</el-col>
+        <el-col :span="16">
+          <el-tag
+            v-for="item in skuInfo.skuAttrValueList"
+            :key="item.id"
+            style="margin: 0 10px 10px 0"
+          >
+            {{ item.valueName }}
+          </el-tag>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">销售属性</el-col>
+        <el-col :span="16">
+          <el-tag
+            v-for="item in skuInfo.skuSaleAttrValueList"
+            :key="item.id"
+            style="margin: 0 10px 10px 0"
+          >
+            {{ item.saleAttrValueName }}
+          </el-tag>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="8">商品图片</el-col>
+        <el-col :span="16">
+          <div class="block text-center">
+            <el-carousel height="150px" trigger="click">
+              <el-carousel-item v-for="item in skuInfo.skuImageList" :key="item.id">
+                <img :src="item.imgUrl" alt="" style="width: 100%; height: 100%" />
+              </el-carousel-item>
+            </el-carousel>
+          </div>
+        </el-col>
+      </el-row>
+    </el-drawer>
   </el-card>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+  .el-row {
+    margin-top: 20px;
+  }
+  .demonstration {
+    color: var(--el-text-color-secondary);
+  }
+
+  .el-carousel__item h3 {
+    color: #475669;
+    opacity: 0.75;
+    line-height: 150px;
+    margin: 0;
+    text-align: center;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n + 1) {
+    background-color: #d3dce6;
+  }
+</style>
