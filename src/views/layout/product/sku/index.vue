@@ -1,7 +1,13 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { reqSkuList, reqOnSaleSKu, reqCancelSaleSku, reqSkuInfo } from '@/api/product/sku/index'
+  import {
+    reqSkuList,
+    reqOnSaleSKu,
+    reqCancelSaleSku,
+    reqSkuInfo,
+    reqDelSku
+  } from '@/api/product/sku/index'
   import type { SkuData } from '@/api/product/sku/type'
   // 分页器当前页
   const pageNo = ref(1)
@@ -53,8 +59,23 @@
     }
   }
   // 点击删除按钮的回调
-  const deleteSku = (row: SkuData[]) => {
-    console.log(row)
+  const deleteSku = async (row: SkuData) => {
+    const res = await reqDelSku(row.id)
+    if (res.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      if (skuData.value.length === 1) {
+        pageNo.value--
+      }
+      getSku()
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '删除失败'
+      })
+    }
   }
   // 点击编辑按钮的回调
   const toLook = () => {

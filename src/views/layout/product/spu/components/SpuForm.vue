@@ -79,7 +79,6 @@
     // 清空 id
     spuParams.value.id = ''
     spuParams.value.category3Id = c3Id
-    console.log(123)
     // 获取全部品牌数据
     const res = await reqAllTrademark()
     trademark.value = res.data

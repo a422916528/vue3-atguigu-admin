@@ -3,6 +3,7 @@ import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import { useUserStore } from '@/stores/user'
 import pinia from '@/stores'
+import { useCategoryStore } from '@/stores/category'
 
 nprogress.configure({ showSpinner: false })
 
@@ -171,11 +172,13 @@ router.beforeEach((to, from, next) => {
       next({ path: '/login', query: { redirect: to.path } })
     }
   }
-  //
 })
 // 后置守卫
 router.afterEach(() => {
   nprogress.done()
+  // 路由跳转清空 categoryStore 中的数据
+  const categoryStore = useCategoryStore()
+  categoryStore.$reset()
 })
 // export default router
 export { router, menuRoutes }
