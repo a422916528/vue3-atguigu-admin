@@ -39,6 +39,7 @@
     if (row.isSale === 0) {
       // 商品正在上架，点击更新为下架
       const res = await reqCancelSaleSku(row.id)
+      console.log(res)
       if (res.code === 200) {
         ElMessage({
           type: 'success',
@@ -49,6 +50,7 @@
     } else {
       // 商品已经下架，点击更新为上架
       const res = await reqOnSaleSKu(row.id)
+      console.log(res)
       if (res.code === 200) {
         ElMessage({
           type: 'success',

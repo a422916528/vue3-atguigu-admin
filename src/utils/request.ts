@@ -45,6 +45,10 @@ request.interceptors.response.use(
     switch (error.response.status) {
       case 404:
         ElMessage.error('请求地址错误')
+        break
+      case 400:
+        ElMessage.error(error.message)
+        break
     }
     return Promise.reject(error)
   }
