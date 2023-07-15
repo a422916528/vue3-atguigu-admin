@@ -41,10 +41,6 @@
   const addUser = () => {
     // 显示抽屉
     drawer.value = true
-    // 移除表单校验信息，同时清除表单数据
-    nextTick(() => {
-      formRef.value.resetFields()
-    })
   }
   // 点击确定按钮的回调
   const confirm = async () => {
@@ -57,8 +53,9 @@
         type: 'success',
         message: userParams.value.id ? '更新成功' : '添加成功'
       })
-      getUserInfo()
       drawer.value = false
+      userParams.value.id ? pageOn.value : (pageOn.value = 1)
+      getUserInfo()
     } else {
       ElMessage({
         type: 'error',
@@ -71,17 +68,12 @@
   const cancel = () => {
     // 关闭抽屉
     drawer.value = false
-    // 清空数据
-    Object.assign(userParams.value, {
-      username: '',
-      password: '',
-      name: ''
-    })
   }
   // 点击编辑按钮的回调
   const updateUser = (row: User) => {
     // 显示抽屉
     drawer.value = true
+    Object.assign(userParams.value, row)
   }
   // 表单校验
   const rules = ref({
@@ -136,6 +128,17 @@
   })
   // 获取表单实例
   const formRef = ref(null)
+  // 抽屉关闭的回调
+  const closeDrawer = () => {
+    // 移除表单校验信息，同时清除表单数据
+    formRef.value.resetFields()
+    Object.assign(userParams.value, {
+      id: '',
+      username: '',
+      password: '',
+      name: ''
+    })
+  }
   onMounted(() => {
     getUserInfo()
   })
@@ -189,7 +192,11 @@
     />
   </el-card>
   <!-- 抽屉，添加新用户和修改用户信息 -->
-  <el-drawer v-model="drawer" :title="userParams.id ? '修改用户' : '添加用户'">
+  <el-drawer
+    v-model="drawer"
+    :title="userParams.id ? '修改用户' : '添加用户'"
+    @closed="closeDrawer"
+  >
     <el-form label-width="80px" :model="userParams" :rules="rules" ref="formRef">
       <el-form-item label="用户名" prop="username">
         <el-input placeholder="请输入用户名" v-model.trim="userParams.username"></el-input>
@@ -197,7 +204,7 @@
       <el-form-item label="昵称" prop="name">
         <el-input placeholder="请输入用户昵称" v-model.trim="userParams.name"></el-input>
       </el-form-item>
-      <el-form-item label="密码" prop="password">
+      <el-form-item label="密码" prop="password" v-if="!userParams.id">
         <el-input
           placeholder="请输入密码"
           type="password"
