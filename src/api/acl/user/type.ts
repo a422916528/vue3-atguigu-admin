@@ -7,13 +7,13 @@ export interface ResponseData {
 // 每条账号信息的类型
 export interface User {
   id?: number
-  createTime: string
-  updateTime: string
+  createTime?: string
+  updateTime?: string
   username?: string
   password?: string
   name?: string
-  phone: null
-  roleName: string
+  phone?: number
+  roleName?: string
 }
 // 全部用户信息
 export type Records = User[]
