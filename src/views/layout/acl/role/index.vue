@@ -1,8 +1,13 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { reqAllRole, reqAddOrUpdate } from '@/api/acl/role/index'
-  import type { AllRole, RoleData } from '@/api/acl/role/type'
+  import {
+    reqAllRole,
+    reqAddOrUpdate,
+    reqRolePermission,
+    reqSetPermission
+  } from '@/api/acl/role/index'
+  import type { AllRole, RoleData, MenuData } from '@/api/acl/role/type'
   // #region 数据展示
   // 当前页数
   const pageOn = ref(1)
@@ -83,10 +88,10 @@
     }
     dialogVisible.value = false
   }
-  // 更新职位按钮的回调
+  //编辑角色按钮的回调
   const editRole = (row: RoleData) => {
     dialogVisible.value = true
-    Object.assign(roleParams.value, JSON.parse(JSON.stringify(row)))
+    Object.assign(roleParams.value, row)
   }
   // 对话框表单校验
   const rules = ref({
@@ -100,14 +105,93 @@
     // 清空数据
     roleParams.value.roleName = ''
     roleParams.value.id = ''
+    Object.assign(roleParams.value, {
+      roleName: '',
+      id: ''
+    })
     // 取消表单校验
     formRef.value.resetFields()
   }
   //#endregion
+
+  // #region 分配权限
+  // 控制抽屉显示或隐藏
+  const drawer = ref(false)
+  // 存储权限列表
+  const menuArr = ref<MenuData[]>([])
+  // 点击分配权限按钮的回调
+  const setPermission = async (row: RoleData) => {
+    drawer.value = true
+    const res = await reqRolePermission(row.id as number)
+    if (res.code === 200) {
+      menuArr.value = res.data
+      // 存储 ID
+      selectArr.value = filterSelectArr(menuArr.value, [])
+      roleParams.value.id = row.id
+    }
+  }
+  // 树形控件配置
+  const defaultProps = {
+    children: 'children',
+    label: 'name'
+  }
+  // 存储勾选的节点 ID (四级 ID)
+  const selectArr = ref<number[]>([])
+  // 过滤第四级的 ID
+  const filterSelectArr = (allData: any, initArr: any) => {
+    allData.forEach((item: any) => {
+      // 结束条件
+      if (item.select && item.level === 4) {
+        initArr.push(item.id)
+      }
+      // 递归
+      if (item.children && item.children.length > 0) {
+        filterSelectArr(item.children, initArr)
+      }
+    })
+    return initArr
+  }
+  // 获取树形控件实例
+  const tree = ref(null)
+  // 抽屉确定按钮的回调
+  const savePermission = async () => {
+    const roleId = roleParams.value.id
+    // 选择的 ID
+    const idArr = tree.value.getCheckedKeys()
+    // 半选的 ID
+    const idArr1 = tree.value.getHalfCheckedKeys()
+    const permissionId = [...idArr1, ...idArr]
+    const res = await reqSetPermission(roleId as number, permissionId)
+    if (res.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '修改成功'
+      })
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '修改失败'
+      })
+    }
+    drawer.value = false
+  }
+  // 抽屉关闭的回调
+  const closeDrawer = () => {
+    // 清空数据
+    selectArr.value = []
+    roleParams.value.id = ''
+  }
+  // #endregion
+
+  // #region 删除功能
+  // 点击删除按钮的回调
+  const delRole = (row: RoleData) => {}
+  // #endregion
 </script>
 
 <template>
   <el-card shadow="hover">
+    <!-- 搜索区域 -->
     <el-form inline style="display: flex; justify-content: space-between">
       <el-form-item label="搜索职位：">
         <el-input placeholder="请输入职位" v-model.trim="keyWord"></el-input>
@@ -131,13 +215,17 @@
       <el-table-column label="更新时间" prop="updateTime"></el-table-column>
       <el-table-column label="操作" align="center" width="340px">
         <template v-slot="{ row }">
-          <el-button type="primary" size="small" icon="User">分配权限</el-button>
+          <el-button type="primary" size="small" icon="User" @click="setPermission(row)">
+            分配权限
+          </el-button>
           <el-button type="primary" size="small" icon="Edit" @click="editRole(row)">
             编辑角色
           </el-button>
           <el-popconfirm :title="`你确定要删除吗?`" width="240px">
             <template #reference>
-              <el-button type="primary" size="small" icon="Delete">删除角色</el-button>
+              <el-button type="primary" size="small" icon="Delete" @click="delRole(row)">
+                删除角色
+              </el-button>
             </template>
           </el-popconfirm>
         </template>
@@ -162,6 +250,25 @@
         </span>
       </template>
     </el-dialog>
+    <!-- 抽屉，分配用户权限 -->
+    <el-drawer v-model="drawer" title="I am the title" :with-header="false" @closed="closeDrawer">
+      <span>分配权限</span>
+      <!-- 树形控件 -->
+      <el-tree
+        ref="tree"
+        :data="menuArr"
+        :props="defaultProps"
+        :show-checkbox="true"
+        :default-checked-keys="selectArr"
+        default-expand-all
+        node-key="id"
+        style="margin: 60px 0 0 20px"
+      />
+      <template #footer>
+        <el-button type="primary" @click="savePermission">确定</el-button>
+        <el-button @click="drawer = false">取消</el-button>
+      </template>
+    </el-drawer>
     <!-- 分页器 -->
     <el-pagination
       v-model:current-page="pageOn"
