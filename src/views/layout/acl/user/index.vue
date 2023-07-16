@@ -30,7 +30,7 @@
   }
   // 获取所有已有的用户信息
   const getUserInfo = async () => {
-    const res = await reqUserInfo(pageOn.value, limit.value)
+    const res = await reqUserInfo(pageOn.value, limit.value, keyWord.value)
     if (res.code === 200) {
       userInfoArr.value = res.data.records
       total.value = res.data.total
@@ -272,6 +272,22 @@
     }
   }
   // #endregion
+
+  // #region 搜索功能
+  // 存储搜索关键词
+  const keyWord = ref('')
+  // 搜索按钮的回调
+  const searchUser = () => {
+    getUserInfo()
+    // 清空
+    keyWord.value = ''
+  }
+  // 重置按钮的回调
+  const reset = () => {
+    // location.reload()
+    getUserInfo()
+  }
+  // #endregion
   onMounted(() => {
     getUserInfo()
   })
@@ -281,11 +297,13 @@
   <el-card shadow="hover">
     <el-form inline class="searUser-form">
       <el-form-item label="用户名：">
-        <el-input placeholder="请输入用户名"></el-input>
+        <el-input placeholder="请输入用户名" v-model="keyWord"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary">搜索</el-button>
-        <el-button type="info">重置</el-button>
+        <el-button type="primary" :disabled="keyWord ? false : true" @click="searchUser">
+          搜索
+        </el-button>
+        <el-button type="info" @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
   </el-card>

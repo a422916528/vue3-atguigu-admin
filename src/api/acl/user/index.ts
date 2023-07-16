@@ -20,8 +20,8 @@ enum API {
 }
 
 // 获取全部已有用户的账号信息
-export const reqUserInfo = (page: number, limit: number) => {
-  return request.get<any, ResUserData>(API.ALLUSER_URL + `${page}/${limit}`)
+export const reqUserInfo = (page: number, limit: number, username: string) => {
+  return request.get<any, ResUserData>(API.ALLUSER_URL + `${page}/${limit}/?username=${username}`)
 }
 // 添加用户与修改用户
 export const reqAddOrUpdateUser = (data: User) => {
