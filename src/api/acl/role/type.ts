@@ -7,11 +7,11 @@ export interface ResponseData {
 
 // 每一个职位的类型
 export interface RoleData {
-  id: number
-  createTime: string
-  updateTime: string
+  id?: number | string
+  createTime?: string
+  updateTime?: string
   roleName: string
-  remark: null
+  remark?: string
 }
 // 全部职位的数组
 export type AllRole = RoleData[]
