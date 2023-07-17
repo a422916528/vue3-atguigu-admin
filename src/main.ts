@@ -12,6 +12,8 @@ import globalCom from '@/components/index'
 import globalDirective from '@/directives/index'
 // 引入全局样式
 import '@/styles/index.scss'
+// 暗黑模式样式
+import 'element-plus/theme-chalk/dark/css-vars.css'
 
 const app = createApp(App)
 

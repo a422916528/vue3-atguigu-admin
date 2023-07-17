@@ -50,6 +50,51 @@
     })
     router.push({ name: 'login', query: { redirect: route.path } })
   }
+
+  // 暗黑模式开关
+  const dark = ref(false)
+  // 暗黑模式切换的回调
+  const darkChange = () => {
+    const html = document.documentElement
+    if (dark.value) {
+      // 添加类名
+      html.className = 'dark'
+    } else {
+      // 移除类名
+      html.className = ''
+    }
+  }
+  //主题颜色设置
+  // 获取本地存储中的颜色数据
+  const localColor = JSON.parse(localStorage.getItem('color'))
+  // 当前颜色
+  const color = ref(localColor?.color || '')
+  // 颜色列表
+  const predefineColors = ref(localColor?.colorList || [])
+  const setColor = () => {
+    const el = document.documentElement
+    // 获取 css 变量
+    getComputedStyle(el).getPropertyValue(`--el-color-primary`)
+    // 设置 css 变量
+    el.style.setProperty('--el-color-primary', color.value)
+
+    // 存储到颜色列表中
+    if (predefineColors.value.find(item => item === color.value)) {
+      // 存在
+      return
+    } else {
+      // 不存在，添加
+      predefineColors.value.push(color.value)
+      // 持久化
+      localStorage.setItem(
+        'color',
+        JSON.stringify({
+          color: color.value,
+          colorList: predefineColors.value
+        })
+      )
+    }
+  }
 </script>
 
 <template>
@@ -80,7 +125,25 @@
     <div class="tabbar_right">
       <el-button circle icon="Refresh" @click="refresh"></el-button>
       <el-button circle icon="FullScreen" @click="fullScreen"></el-button>
-      <el-button circle icon="Setting"></el-button>
+      <el-popover placement="bottom" title="主题设置" :width="200" trigger="click">
+        <el-form>
+          <el-form-item label="主题颜色">
+            <el-color-picker
+              v-model="color"
+              show-alpha
+              :predefine="predefineColors"
+              @change="setColor"
+            />
+          </el-form-item>
+          <el-form-item label="暗黑模式">
+            <el-switch v-model="dark" @change="darkChange" />
+          </el-form-item>
+        </el-form>
+        <template #reference>
+          <el-button circle icon="Setting"></el-button>
+        </template>
+      </el-popover>
+
       <img
         :src="userStore.userInfo.avatar"
         alt=""
