@@ -5,7 +5,8 @@
     reqAllRole,
     reqAddOrUpdate,
     reqRolePermission,
-    reqSetPermission
+    reqSetPermission,
+    reqRemovePermission
   } from '@/api/acl/role/index'
   import type { AllRole, RoleData, MenuData } from '@/api/acl/role/type'
   // #region 数据展示
@@ -54,6 +55,7 @@
   // #region 添加和修改职位
   // 收集职位数据
   const roleParams = ref<RoleData>({
+    id: '',
     roleName: ''
   })
   // 点击添加职位按钮的回调
@@ -102,15 +104,14 @@
   })
   // 对话框关闭时的回调
   const closeDialog = () => {
+    // 取消表单校验
+    formRef.value.resetFields()
     // 清空数据
-    roleParams.value.roleName = ''
-    roleParams.value.id = ''
     Object.assign(roleParams.value, {
       roleName: '',
       id: ''
     })
-    // 取消表单校验
-    formRef.value.resetFields()
+    console.log(roleParams.value)
   }
   //#endregion
 
@@ -185,7 +186,22 @@
 
   // #region 删除功能
   // 点击删除按钮的回调
-  const delRole = (row: RoleData) => {}
+  const delRole = async (row: RoleData) => {
+    const res = await reqRemovePermission(row.id as number)
+    if (res.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      pageOn.value = roleArr.value.length > 1 ? pageOn.value : pageOn.value--
+      getRole()
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '删除失败'
+      })
+    }
+  }
   // #endregion
 </script>
 
@@ -221,11 +237,13 @@
           <el-button type="primary" size="small" icon="Edit" @click="editRole(row)">
             编辑角色
           </el-button>
-          <el-popconfirm :title="`你确定要删除吗?`" width="240px">
+          <el-popconfirm
+            :title="`你确定要删除${row.roleName}吗?`"
+            width="240px"
+            @confirm="delRole(row)"
+          >
             <template #reference>
-              <el-button type="primary" size="small" icon="Delete" @click="delRole(row)">
-                删除角色
-              </el-button>
+              <el-button type="primary" size="small" icon="Delete">删除角色</el-button>
             </template>
           </el-popconfirm>
         </template>
