@@ -4,6 +4,7 @@ import 'nprogress/nprogress.css'
 import { useUserStore } from '@/stores/user'
 import pinia from '@/stores'
 import { useCategoryStore } from '@/stores/category'
+import { watch } from 'vue'
 
 nprogress.configure({ showSpinner: false })
 
