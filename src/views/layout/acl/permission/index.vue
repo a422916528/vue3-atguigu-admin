@@ -1,10 +1,10 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { reqAllPermission, reqAddOrUpdateMenu } from '@/api/acl/permission/index'
+  import { reqAllPermission, reqAddOrUpdateMenu, reqRemoveMenu } from '@/api/acl/permission/index'
   import type { MenuData, MenuParams } from '@/api/acl/permission/type'
   // #region 数据渲染
-  const tableData = ref([])
+  const tableData = ref<MenuData[]>([])
   // 获取全部菜单数据
   const getPermission = async () => {
     const res = await reqAllPermission()
@@ -68,6 +68,25 @@
     dialogVisible.value = false
   }
   // #endregion
+
+  // #region 删除功能
+  // 删除按钮的回调
+  const delMenu = async (row: MenuData) => {
+    const res = await reqRemoveMenu(row.id)
+    if (res.code === 200) {
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      getPermission()
+    } else {
+      ElMessage({
+        type: 'error',
+        message: '删除失败'
+      })
+    }
+  }
+  // #endregion
 </script>
 
 <template>
@@ -94,9 +113,17 @@
           >
             编辑
           </el-button>
-          <el-button size="small" type="primary" :disabled="row.level === 1 ? true : false">
-            删除
-          </el-button>
+          <el-popconfirm
+            width="200px"
+            :title="`你确定要删除${row.name}吗?`"
+            @confirm="delMenu(row)"
+          >
+            <template #reference>
+              <el-button size="small" type="primary" :disabled="row.level === 1 ? true : false">
+                删除
+              </el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
