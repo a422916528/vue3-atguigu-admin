@@ -22,3 +22,12 @@ export interface MenuData {
 export interface ResMenuData extends ResponseData {
   data: MenuData[]
 }
+
+// 添加与修改菜单携带参数类型
+export interface MenuParams {
+  id?: number
+  level: number | string
+  name: string
+  pid: number | string
+  code: string
+}
