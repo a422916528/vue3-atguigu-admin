@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   import Top from './components/top/index.vue'
+  import Tourist from './components/left/tourist.vue'
+  import Sex from './components/left/sex.vue'
+  import Age from './components/left/age.vue'
   // #region scale 适配
   const screenRef = ref<HTMLElement>(null)
   function getScale(w = 1920, h = 1080) {
@@ -20,9 +23,17 @@
 <template>
   <div class="container">
     <div class="screen" ref="screenRef">
+      <!-- 顶部 -->
       <Top></Top>
       <div class="main">
-        <div class="left">左</div>
+        <div class="left">
+          <!-- 游客比例 -->
+          <Tourist></Tourist>
+          <!-- 男女比例 -->
+          <Sex></Sex>
+          <!-- 年龄比例 -->
+          <Age></Age>
+        </div>
         <div class="center">中</div>
         <div class="right">右</div>
       </div>
@@ -50,6 +61,9 @@
         display: flex;
         .left {
           flex: 1;
+          flex-direction: column;
+          display: flex;
+          height: 1040px;
         }
         .center {
           flex: 2;

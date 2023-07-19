@@ -17,6 +17,9 @@ dependencies:
   echarts:
     specifier: ^5.4.2
     version: 5.4.3
+  echarts-liquidfill:
+    specifier: ^3.1.0
+    version: 3.1.0(echarts@5.4.3)
   element-plus:
     specifier: ^2.3.6
     version: 2.3.6(vue@3.3.4)
@@ -2041,6 +2044,14 @@ packages:
     dependencies:
       is-obj: 2.0.0
     dev: true
+
+  /echarts-liquidfill@3.1.0(echarts@5.4.3):
+    resolution: {integrity: sha512-5Dlqs/jTsdTUAsd+K5LPLLTgrbbNORUSBQyk8PSy1Mg2zgHDWm83FmvA4s0ooNepCJojFYRITTQ4GU1UUSKYLw==}
+    peerDependencies:
+      echarts: ^5.0.1
+    dependencies:
+      echarts: 5.4.3
+    dev: false
 
   /echarts@5.4.3:
     resolution: {integrity: sha512-mYKxLxhzy6zyTi/FaEbJMOZU1ULGEQHaeIeuMR5L+JnJTpz+YR03mnnpBhbR4+UYJAgiXgpyTVLffPAjOTLkZA==}
