@@ -4,6 +4,8 @@
   import Tourist from './components/left/tourist.vue'
   import Sex from './components/left/sex.vue'
   import Age from './components/left/age.vue'
+  import Map from './components/center/map.vue'
+  import Line from './components/center/line.vue'
   // #region scale 适配
   const screenRef = ref<HTMLElement>(null)
   function getScale(w = 1920, h = 1080) {
@@ -34,7 +36,12 @@
           <!-- 年龄比例 -->
           <Age></Age>
         </div>
-        <div class="center">中</div>
+        <div class="center">
+          <!-- 地图航线 -->
+          <Map></Map>
+          <!-- 游客折线图 -->
+          <Line></Line>
+        </div>
         <div class="right">右</div>
       </div>
     </div>
@@ -67,6 +74,9 @@
         }
         .center {
           flex: 2;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
         }
         .right {
           flex: 1;
