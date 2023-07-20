@@ -1,55 +1,57 @@
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
   import * as echarts from 'echarts'
+
   const chartsRef = ref(null)
+
   onMounted(() => {
-    const myCharts = echarts.init(chartsRef.value)
-    myCharts.setOption({
-      legend: {
-        top: '20%',
-        orient: 'verticalAlign',
-        right: 10,
+    const mycharts = echarts.init(chartsRef.value)
+    mycharts.setOption({
+      // 标题
+      title: {
+        text: '景区排行',
+        left: '50%',
+        // 样式
         textStyle: {
-          color: '#fff'
+          color: '#fff',
+          fontSize: 20
+        },
+        // 子标题
+        subtext: '各大景区排行',
+        // 子标题样式
+        subtextStyle: {
+          color: 'yellowgreen',
+          fontSize: 14
         }
       },
-      tooltip: {
-        trigger: 'item'
+      // x | y
+      xAxis: {
+        type: 'category'
       },
+      yAxis: {},
+      grid: {},
       series: [
         {
-          type: 'pie',
-          radius: [40, 120],
+          type: 'bar',
+          data: [10, 20, 30, 40, 50, 60, 70],
           label: {
             show: true,
-            position: 'inside',
+            position: 'top',
             color: '#fff'
-          },
-          labelLine: {
-            show: false
-          },
-          center: ['50%', '40%'],
-          roseType: 'area',
-          itemStyle: {
-            borderRadius: 8
-          },
-          data: [
-            { value: 40, name: '8-12' },
-            { value: 38, name: '12-18' },
-            { value: 32, name: '18-30' },
-            { value: 30, name: '30-50' },
-            { value: 28, name: '50-90' }
-          ]
+          }
         }
-      ]
+      ],
+      tooltip: {
+        show: true
+      }
     })
   })
 </script>
 
 <template>
-  <div class="age">
+  <div class="rank">
     <div class="top">
-      <p class="title">年龄比例</p>
+      <p class="title">热门景区排行</p>
       <p class="top_bg"></p>
     </div>
     <div class="charts" ref="chartsRef"></div>
@@ -57,14 +59,14 @@
 </template>
 
 <style lang="scss" scoped>
-  .age {
-    flex: 1;
+  .rank {
+    flex: 1.5;
     background: url('@/assets/images/screen/dataScreen-main-lb.png') no-repeat;
     background-size: 100% 100%;
     margin-top: 10px;
     .top {
-      transform: translateY(10px);
       margin-left: 20px;
+      transform: translateY(20px);
       .title {
         color: #fff;
         font-size: 20px;
@@ -80,7 +82,7 @@
     }
     .charts {
       width: 100%;
-      height: 100%;
+      height: 388px;
     }
   }
 </style>

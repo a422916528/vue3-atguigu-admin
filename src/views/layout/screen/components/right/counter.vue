@@ -1,44 +1,43 @@
 <script setup lang="ts">
   import { onMounted, ref } from 'vue'
   import * as echarts from 'echarts'
+
   const chartsRef = ref(null)
+
   onMounted(() => {
-    const myCharts = echarts.init(chartsRef.value)
-    myCharts.setOption({
-      legend: {
-        top: '20%',
-        orient: 'verticalAlign',
-        right: 10,
+    const mycharts = echarts.init(chartsRef.value)
+    mycharts.setOption({
+      title: {
+        text: '游客消费统计',
+        top: 20,
         textStyle: {
           color: '#fff'
         }
       },
+      radar: {
+        indicator: [
+          { name: '美食', max: 6500 },
+          { name: '出行', max: 16000 },
+          { name: '爱好', max: 30000 },
+          { name: '景点', max: 38000 },
+          { name: '项目', max: 52000 }
+        ]
+      },
       tooltip: {
-        trigger: 'item'
+        show: true
       },
       series: [
         {
-          type: 'pie',
-          radius: [40, 120],
-          label: {
-            show: true,
-            position: 'inside',
-            color: '#fff'
-          },
-          labelLine: {
-            show: false
-          },
-          center: ['50%', '40%'],
-          roseType: 'area',
-          itemStyle: {
-            borderRadius: 8
-          },
+          type: 'radar',
           data: [
-            { value: 40, name: '8-12' },
-            { value: 38, name: '12-18' },
-            { value: 32, name: '18-30' },
-            { value: 30, name: '30-50' },
-            { value: 28, name: '50-90' }
+            {
+              value: [4200, 3000, 20000, 35000, 50000, 18000],
+              name: '美食'
+            },
+            {
+              value: [5000, 14000, 28000, 26000, 42000, 21000],
+              name: '景点'
+            }
           ]
         }
       ]
@@ -47,9 +46,9 @@
 </script>
 
 <template>
-  <div class="age">
+  <div class="counter">
     <div class="top">
-      <p class="title">年龄比例</p>
+      <p class="title">预约渠道统计</p>
       <p class="top_bg"></p>
     </div>
     <div class="charts" ref="chartsRef"></div>
@@ -57,13 +56,12 @@
 </template>
 
 <style lang="scss" scoped>
-  .age {
+  .counter {
     flex: 1;
     background: url('@/assets/images/screen/dataScreen-main-lb.png') no-repeat;
     background-size: 100% 100%;
     margin-top: 10px;
     .top {
-      transform: translateY(10px);
       margin-left: 20px;
       .title {
         color: #fff;
@@ -80,7 +78,7 @@
     }
     .charts {
       width: 100%;
-      height: 100%;
+      height: 220px;
     }
   }
 </style>

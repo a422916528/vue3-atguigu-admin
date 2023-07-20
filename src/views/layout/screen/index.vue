@@ -6,6 +6,9 @@
   import Age from './components/left/age.vue'
   import Map from './components/center/map.vue'
   import Line from './components/center/line.vue'
+  import Rank from './components/right/rank.vue'
+  import Year from './components/right/year.vue'
+  import Counter from './components/right/counter.vue'
   // #region scale 适配
   const screenRef = ref<HTMLElement>(null)
   function getScale(w = 1920, h = 1080) {
@@ -42,7 +45,14 @@
           <!-- 游客折线图 -->
           <Line></Line>
         </div>
-        <div class="right">右</div>
+        <div class="right">
+          <!-- 排行榜 -->
+          <Rank></Rank>
+          <!-- 年度 -->
+          <Year></Year>
+          <!-- 渠道统计 -->
+          <Counter></Counter>
+        </div>
       </div>
     </div>
   </div>
@@ -80,6 +90,8 @@
         }
         .right {
           flex: 1;
+          display: flex;
+          flex-direction: column;
         }
       }
     }

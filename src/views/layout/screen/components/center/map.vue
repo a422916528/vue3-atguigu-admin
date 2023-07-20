@@ -22,17 +22,17 @@
         // 每一个区域的样式
         itemStyle: {
           // 颜色
-          color: '#101a44',
+          color: '#0c224f',
           opacity: 0.8,
           // 阴影
-          shadowColor: '#4bfcff',
+          shadowColor: '#16317d',
           shadowBlur: 20
         },
         // 鼠标经过高亮效果
         emphasis: {
           itemStyle: {
             // 图形颜色
-            color: '#1f2855'
+            color: '#375099'
           },
           label: {
             // 字体颜色
