@@ -7,6 +7,20 @@ import type {
   userInfoResponseData,
   logoutResponseData
 } from '@/api/user/type'
+import { asyncRoute, constantRoute, router } from '@/router/index.ts'
+import cloneDeep from 'lodash/cloneDeep'
+
+// 用于过滤用户拥有的异步路由
+function filterAsyncRoutes(asyncRoutes: any, userRoutes: any) {
+  return asyncRoutes.filter(item => {
+    if (userRoutes.includes(item.name)) {
+      if (item.children && item.children.length > 0) {
+        item.children = filterAsyncRoutes(item.children, userRoutes)
+      }
+      return true
+    }
+  })
+}
 
 export const useUserStore = defineStore(
   'user',
@@ -15,7 +29,13 @@ export const useUserStore = defineStore(
     const userInfo = ref({
       token: '',
       username: '',
-      avatar: ''
+      avatar: '',
+      // 用户需要展示的异步路由
+      userMenuRoutes: [],
+      // 过滤的异步路由
+      asyncRoutes: [],
+      // 按钮的权限
+      buttonsArr: []
     })
 
     // 用户登录
@@ -35,6 +55,13 @@ export const useUserStore = defineStore(
       if (res.code == 200) {
         userInfo.value.avatar = res.data.avatar
         userInfo.value.username = res.data.name
+        userInfo.value.buttonsArr = res.data.buttons
+        // 过滤异步路由
+        const userAsyncRoutes = filterAsyncRoutes(cloneDeep(asyncRoute), res.data.routes)
+        userInfo.value.asyncRoutes = userAsyncRoutes
+        // 添加动态路由
+        userAsyncRoutes.forEach(route => router.addRoute('layout', route))
+        userInfo.value.userMenuRoutes = [...constantRoute, ...userAsyncRoutes]
       } else {
         return Promise.reject(new Error(res.message))
       }
@@ -47,6 +74,9 @@ export const useUserStore = defineStore(
         userInfo.value.token = ''
         userInfo.value.username = ''
         userInfo.value.avatar = ''
+        userInfo.value.userMenuRoutes = []
+        userInfo.value.asyncRoutes = []
+        userInfo.value.buttonsArr = []
         return 'ok'
       } else {
         return Promise.reject(new Error(res.message))
@@ -61,6 +91,8 @@ export const useUserStore = defineStore(
     }
   },
   {
-    persist: true
+    persist: {
+      paths: ['userInfo.token', 'userInfo.username', 'userInfo.avatar', 'userInfo.userMenuRoutes']
+    }
   }
 )

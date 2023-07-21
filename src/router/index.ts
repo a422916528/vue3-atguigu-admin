@@ -4,11 +4,11 @@ import 'nprogress/nprogress.css'
 import { useUserStore } from '@/stores/user'
 import pinia from '@/stores'
 import { useCategoryStore } from '@/stores/category'
-import { watch } from 'vue'
 
 nprogress.configure({ showSpinner: false })
 
-const menuRoutes = [
+// 常量路由
+const constantRoute = [
   {
     // 数据大屏
     path: '/screen',
@@ -27,10 +27,21 @@ const menuRoutes = [
       title: '首页',
       icon: 'HomeFilled'
     }
-  },
+  }
+]
+// any路由
+const anyRoute = [
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: '/404',
+    name: 'any'
+  }
+]
+// 异步路由
+const asyncRoute = [
   {
     path: '/acl',
-    name: 'acl',
+    name: 'Acl',
     redirect: 'user',
     meta: {
       title: '权限管理',
@@ -39,7 +50,7 @@ const menuRoutes = [
     children: [
       {
         path: '/acl/user',
-        name: 'user',
+        name: 'User',
         component: () => import('@/views/layout/acl/user/index.vue'),
         meta: {
           title: '用户管理',
@@ -48,7 +59,7 @@ const menuRoutes = [
       },
       {
         path: '/acl/role',
-        name: 'role',
+        name: 'Role',
         component: () => import('@/views/layout/acl/role/index.vue'),
         meta: {
           title: '角色管理',
@@ -57,7 +68,7 @@ const menuRoutes = [
       },
       {
         path: '/acl/permission',
-        name: 'permission',
+        name: 'Permission',
         component: () => import('@/views/layout/acl/permission/index.vue'),
         meta: {
           title: '菜单管理',
@@ -68,7 +79,7 @@ const menuRoutes = [
   },
   {
     path: '/product',
-    name: 'product',
+    name: 'Product',
     redirect: 'trademark',
     meta: {
       title: '商品管理',
@@ -77,7 +88,7 @@ const menuRoutes = [
     children: [
       {
         path: '/product/trademark',
-        name: 'trademark',
+        name: 'Trademark',
         component: () => import('@/views/layout/product/trademark/index.vue'),
         meta: {
           title: '品牌管理',
@@ -86,7 +97,7 @@ const menuRoutes = [
       },
       {
         path: '/product/attr',
-        name: 'attr',
+        name: 'Attr',
         component: () => import('@/views/layout/product/attr/index.vue'),
         meta: {
           title: '属性管理',
@@ -95,7 +106,7 @@ const menuRoutes = [
       },
       {
         path: '/product/spu',
-        name: 'spu',
+        name: 'Spu',
         component: () => import('@/views/layout/product/spu/index.vue'),
         meta: {
           title: 'spu管理',
@@ -104,7 +115,7 @@ const menuRoutes = [
       },
       {
         path: '/product/sku',
-        name: 'sku',
+        name: 'Sku',
         component: () => import('@/views/layout/product/sku/index.vue'),
         meta: {
           title: 'sku管理',
@@ -126,21 +137,16 @@ const router = createRouter({
       }
     },
     {
-      path: '/404',
-      component: () => import('@/views/404/index.vue')
-    },
-    {
-      path: '/:pathMatch(.*)*',
-      redirect: '/404',
-      name: 'any'
-    },
-    {
       redirect: '/home',
       path: '/',
       component: () => import('@/views/layout/index.vue'),
       name: 'layout',
       // menu 菜单
-      children: menuRoutes
+      children: constantRoute
+    },
+    {
+      path: '/404',
+      component: () => import('@/views/404/index.vue')
     }
   ],
   // 滚动行为
@@ -152,7 +158,7 @@ const router = createRouter({
   }
 })
 // 前置守卫
-router.beforeEach((to, from, next) => {
+router.beforeEach(async to => {
   document.title = `硅谷甄选-${to.meta.title}`
   nprogress.start()
   const userStore = useUserStore(pinia)
@@ -161,16 +167,27 @@ router.beforeEach((to, from, next) => {
   if (token) {
     // 用户已登录
     if (to.path === '/login') {
-      next({ path: '/' })
+      return { path: '/' }
     } else {
-      next()
+      // // 当页面刷新的时候，asyncRoutes 没有进行数据持久化，页面刷新就会清空
+      if (userStore.userInfo.asyncRoutes.length === 0) {
+        // 添加任意路由
+        anyRoute.forEach((route: any) => {
+          router.addRoute(route)
+        })
+        // 添加异步路由
+        await userStore.getUserInfo()
+        return { ...to, replace: true }
+      } else {
+        return true
+      }
     }
   } else {
     // 用户未登录
     if (to.path === '/login') {
-      next()
+      return true
     } else {
-      next({ path: '/login', query: { redirect: to.path } })
+      return { path: '/login', query: { redirect: to.path } }
     }
   }
 })
@@ -182,4 +199,4 @@ router.afterEach(() => {
   categoryStore.$reset()
 })
 // export default router
-export { router, menuRoutes }
+export { router, constantRoute, asyncRoute, anyRoute }

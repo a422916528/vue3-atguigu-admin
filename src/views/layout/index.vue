@@ -1,11 +1,12 @@
 <script setup>
   import {} from 'vue'
   import Menu from './components/menu/index.vue'
-  import { menuRoutes } from '@/router/index.ts'
   import Tabbar from './tabbar/index.vue'
   import { useMenuStore } from '@/stores/menu.ts'
   import Main from './main/index.vue'
+  import { useUserStore } from '@/stores/user.ts'
   const menuStore = useMenuStore()
+  const userStore = useUserStore()
 </script>
 
 <template>
@@ -19,7 +20,7 @@
           <h1 class="title" :style="{ opacity: menuStore.menuFold ? 0 : 1 }">硅谷甄选运营平台</h1>
         </div>
         <!-- 菜单 -->
-        <Menu :menuList="menuRoutes" :menuFold="menuStore.menuFold"></Menu>
+        <Menu :menuList="userStore.userInfo.userMenuRoutes" :menuFold="menuStore.menuFold"></Menu>
       </el-aside>
       <el-container>
         <!-- 顶部 -->

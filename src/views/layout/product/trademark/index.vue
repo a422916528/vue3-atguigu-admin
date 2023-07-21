@@ -10,6 +10,9 @@
   onMounted(() => {
     getHasTrademark()
   })
+  // import { useUserStore } from '@/stores/user'
+  // const userStore = useUserStore()
+
   // 当前页数
   const pageOn = ref(1)
   // 每页展示多少条数据
@@ -183,7 +186,9 @@
 </script>
 <template>
   <el-card class="box-card" shadow="hover">
-    <el-button type="primary" icon="Plus" @click="addTrademark">添加品牌</el-button>
+    <el-button type="primary" icon="Plus" @click="addTrademark" v-hasBtn="'btn.Trademark.add'">
+      添加品牌
+    </el-button>
     <!-- 表格 -->
     <el-table border style="width: 100%; margin-top: 20px" :data="trademarkArr">
       <el-table-column prop="id" label="序号" width="150" />

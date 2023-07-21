@@ -7,7 +7,6 @@
   watch(
     () => tabbarStore.refresh,
     () => {
-      console.log('变化了')
       flag.value = false
       nextTick(() => {
         flag.value = true
